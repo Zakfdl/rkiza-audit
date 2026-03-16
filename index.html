@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Rkiza.com E-Commerce Audit Dashboard — Bilingual Arabic/English interactive audit report for Saudi Arabia building materials store."/>
+<meta property="og:title" content="Rkiza.com — E-Commerce Audit Dashboard 2026"/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#0A3D6B"/>
+<title>Rkiza.com — Audit Dashboard 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#F4F6F9;color:#1E293B;line-height:1.6;font-size:15px;overflow-x:hidden}
+[dir="rtl"] body,[dir="rtl"]{font-family:'Cairo',sans-serif}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+a{text-decoration:none;color:inherit}
+
+/* ── Variables ── */
+:root{
+  --primary:#0A3D6B;--accent:#E65100;--red:#E53935;--amber:#FB8C00;--green:#2E7D32;--blue:#1565C0;
+  --bg:#F4F6F9;--surface:#fff;--surface2:#F8FAFC;--border:#E2E8F0;--border2:#CBD5E1;
+  --text:#1E293B;--text2:#475569;--text3:#94A3B8;
+  --sidebar:#0D1B2A;--sidebar-w:240px;--header-h:64px;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-full:9999px;
+  --sh-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+  --tr:.18s ease;
+}
+
+/* ── Layout ── */
+.app{display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:var(--sidebar-w);background:var(--sidebar);color:#E2E8F0;
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:200;
+  overflow-y:auto;overflow-x:hidden;transition:transform .3s ease;
+}
+[dir="rtl"] .sidebar{left:auto;right:0}
+.sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo-name{font-size:17px;font-weight:700;color:#fff}
+.sidebar-logo-sub{font-size:11px;color:#94A3B8;margin-top:2px}
+.sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;
+  border-radius:var(--r-md);cursor:pointer;color:#CBD5E1;
+  font-size:13.5px;font-weight:500;transition:background var(--tr),color var(--tr);
+  margin-bottom:2px;
+}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:rgba(230,81,0,.18);color:var(--accent)}
+.nav-icon{font-size:16px;flex-shrink:0}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#475569}
+
+/* ── Main ── */
+.main{flex:1;margin-left:var(--sidebar-w);display:flex;flex-direction:column;min-height:100vh}
+[dir="rtl"] .main{margin-left:0;margin-right:var(--sidebar-w)}
+
+/* ── Header ── */
+.header{
+  height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;position:sticky;top:0;z-index:100;box-shadow:var(--sh-sm);
+}
+.header-left{display:flex;align-items:center;gap:16px}
+.menu-btn{
+  display:none;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:var(--r-md);
+  background:#F1F5F9;border:1px solid var(--border);font-size:18px;
+}
+.breadcrumb{font-size:13px;color:var(--text3)}
+.header-right{display:flex;align-items:center;gap:12px}
+.score-badge{
+  background:#FEF2F2;color:var(--red);border:1px solid #FECACA;
+  border-radius:var(--r-full);padding:4px 14px;font-size:12px;font-weight:600;
+}
+.lang-wrap{display:flex;background:#F1F5F9;border:1px solid var(--border);border-radius:var(--r-full);overflow:hidden;padding:2px}
+.lang-btn{padding:5px 14px;border-radius:var(--r-full);font-size:12.5px;font-weight:600;color:var(--text2);transition:all var(--tr)}
+.lang-btn.active{background:var(--primary);color:#fff;box-shadow:var(--sh-sm)}
+
+/* ── Page ── */
+.page{flex:1;padding:32px;max-width:1400px;width:100%}
+.section{display:none;animation:fadeUp .35s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Section header ── */
+.sec-hdr{margin-bottom:24px}
+.sec-title{font-size:22px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.sec-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;background:var(--primary);color:#fff;
+  border-radius:50%;font-size:12px;font-weight:700;flex-shrink:0;
+}
+.sec-sub{font-size:14px;color:var(--text2)}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-sm)}
+.card-sm{padding:16px 20px}
+.card-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:16px}
+
+/* ── Grid ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.mt4{margin-top:16px}.mt6{margin-top:24px}.mb4{margin-bottom:16px}.mb6{margin-bottom:24px}
+.gap4{gap:16px}.gap6{gap:24px}
+
+/* ── KPI cards ── */
+.kpi{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:20px;position:relative;overflow:hidden;transition:transform var(--tr),box-shadow var(--tr);
+}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--primary))}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
+.kpi-icon{font-size:22px;margin-bottom:10px}
+.kpi-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.kpi-val{font-size:26px;font-weight:800;color:var(--text);line-height:1}
+.kpi-sub{font-size:11.5px;color:var(--text3);margin-top:4px}
+
+/* ── Progress bars ── */
+.prog-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border)}
+.prog-row:last-child{border:none}
+.prog-label{width:175px;flex-shrink:0;font-size:13px;font-weight:500}
+[dir="rtl"] .prog-label{text-align:right}
+.prog-track{flex:1;height:10px;background:#F1F5F9;border-radius:var(--r-full);overflow:hidden}
+.prog-fill{height:100%;border-radius:var(--r-full);transition:width .9s cubic-bezier(.34,1.56,.64,1)}
+.prog-val{width:40px;text-align:right;font-size:13px;font-weight:700}
+[dir="rtl"] .prog-val{text-align:left}
+
+/* ── Score circles ── */
+.score-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.score-circle{
+  width:110px;height:110px;border-radius:50%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;border:6px solid var(--sc,#E53935);background:#fff;
+}
+.score-num{font-size:30px;font-weight:800;color:var(--sc,#E53935);line-height:1}
+.score-denom{font-size:11px;color:var(--text3);font-weight:500}
+.score-lbl{font-size:12.5px;font-weight:600;color:var(--text);text-align:center}
+
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:var(--r-full);font-size:11.5px;font-weight:600;white-space:nowrap}
+.b-critical{background:#FEF2F2;color:#C62828;border:1px solid #FECACA}
+.b-high{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A}
+.b-medium{background:#EFF6FF;color:#1E40AF;border:1px solid #BFDBFE}
+.b-low,.b-easy{background:#F0FDF4;color:#14532D;border:1px solid #BBF7D0}
+.b-missing{background:#FEF2F2;color:#C62828;border:1px solid #FECACA}
+.b-partial{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A}
+.b-present{background:#F0FDF4;color:#14532D;border:1px solid #BBF7D0}
+.b-poor{background:#FEF2F2;color:#C62828}
+.b-needs{background:#FFFBEB;color:#92400E}
+.b-good{background:#F0FDF4;color:#14532D}
+.b-medium-e{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A}
+
+/* ── Tables ── */
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-md);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--primary)}
+th{padding:10px 14px;color:#fff;font-weight:600;font-size:11.5px;text-align:left;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+[dir="rtl"] th{text-align:right}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+[dir="rtl"] td{text-align:right}
+td:first-child{font-weight:600;color:var(--text)}
+tr:last-child td{border:none}
+tr:nth-child(even) td{background:var(--surface2)}
+tr:hover td{background:#EFF6FF;transition:background .1s}
+.rkiza-row td{background:#EFF6FF!important;color:var(--primary)!important;font-weight:600!important}
+
+/* ── Issue cards ── */
+.issue-item{
+  display:flex;align-items:flex-start;gap:16px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r-md);padding:16px;
+  transition:box-shadow var(--tr);margin-bottom:10px;
+}
+[dir="rtl"] .issue-item{flex-direction:row-reverse}
+.issue-item:hover{box-shadow:var(--sh-md)}
+.issue-item.critical{border-left:3px solid var(--red)}
+.issue-item.high{border-left:3px solid var(--amber)}
+.issue-item.medium{border-left:3px solid var(--blue)}
+[dir="rtl"] .issue-item.critical{border-left:none;border-right:3px solid var(--red)}
+[dir="rtl"] .issue-item.high{border-left:none;border-right:3px solid var(--amber)}
+[dir="rtl"] .issue-item.medium{border-left:none;border-right:3px solid var(--blue)}
+.issue-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.issue-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.issue-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+
+/* ── Alert boxes ── */
+.alert{border-radius:var(--r-md);padding:16px 20px;display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+[dir="rtl"] .alert{flex-direction:row-reverse;text-align:right}
+.alert-critical{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.alert-info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E3A5F}
+.alert-success{background:#F0FDF4;border:1px solid #BBF7D0;color:#14532D}
+.alert-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#78350F}
+.alert-title{font-weight:700;margin-bottom:4px;font-size:14px}
+.alert-body{font-size:13.5px;line-height:1.6}
+
+/* ── Vitals ── */
+.vitals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+.vital{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;text-align:center;position:relative;overflow:hidden}
+.vital::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--vc,#94A3B8)}
+.vital-metric{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:6px}
+.vital-val{font-size:26px;font-weight:800;line-height:1;margin-bottom:2px}
+.vital-name{font-size:11px;color:var(--text2);margin-top:6px}
+.vital-threshold{font-size:10.5px;color:var(--text3)}
+.vital-status{font-size:10.5px;font-weight:700;margin-top:6px}
+
+/* ── Funnel ── */
+.funnel-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:16px}
+.funnel-title{font-size:14px;font-weight:700;margin-bottom:12px}
+.funnel-bar-wrap{display:flex;justify-content:center;margin-bottom:6px}
+.funnel-bar{border-radius:var(--r-md);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;transition:transform var(--tr)}
+.funnel-bar:hover{transform:scaleX(1.02)}
+.funnel-note{background:#F0FDF4;border:1px solid #86EFAC;border-radius:var(--r-md);padding:12px 16px;font-size:13px;font-weight:600;color:var(--green);text-align:center}
+
+/* ── Roadmap ── */
+.roadmap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.rq{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.rq-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start}
+[dir="rtl"] .rq-header{flex-direction:row-reverse}
+.rq-q{font-size:11px;font-weight:700;opacity:.85;color:#fff}
+.rq-title{font-size:16px;font-weight:700;color:#fff;margin-top:2px}
+.rq-period{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:2px}
+.rq-emoji{font-size:26px;opacity:.5}
+.rq-items{background:var(--surface2);padding:16px;display:flex;flex-direction:column;gap:6px}
+.rq-item{
+  display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);
+  padding:8px 12px;background:var(--surface);border-radius:var(--r-sm);
+  border:1px solid var(--border);line-height:1.4;
+}
+[dir="rtl"] .rq-item{flex-direction:row-reverse;text-align:right}
+.rq-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+
+/* ── Competitor table ── */
+.yes{color:var(--green);font-weight:600}
+.no{color:var(--red);font-weight:600}
+.par{color:var(--amber);font-weight:600}
+
+/* ── Priority num ── */
+.p-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+
+/* ── Filter pills ── */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filter-pill{
+  padding:6px 16px;border-radius:var(--r-full);font-size:13px;font-weight:600;
+  border:1px solid var(--border);background:var(--surface2);color:var(--text2);
+  cursor:pointer;transition:all var(--tr);font-family:inherit;
+}
+.filter-pill.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ── Overlay / mobile ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199}
+.overlay.open{display:block}
+
+/* ── Responsive ── */
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  [dir="rtl"] .sidebar{transform:translateX(100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important;margin-right:0!important}
+  .menu-btn{display:flex}
+  .g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}
+  .roadmap-grid{grid-template-columns:1fr}.funnel-grid{grid-template-columns:1fr}
+  .page{padding:20px}
+  .prog-label{width:130px;font-size:12px}
+  .g6{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr}.g6{grid-template-columns:repeat(2,1fr)}
+  .vitals-grid{grid-template-columns:repeat(2,1fr)}
+  .sec-title{font-size:18px}
+  .header{padding:0 16px}
+}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── Divider ── */
+.divider{height:1px;background:var(--border);margin:24px 0}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">rkiza.com</div>
+    <div class="sidebar-logo-sub" id="sb-title">Audit Dashboard</div>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav"></nav>
+  <div class="sidebar-footer">
+    <div id="sb-agency">E-Commerce Consulting Division</div>
+    <div id="sb-date">March 2026</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main" id="main">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <div class="breadcrumb" id="breadcrumb">rkiza.com / Overview</div>
+    </div>
+    <div class="header-right">
+      <div class="score-badge" id="score-badge">Overall Score: 4.9/10</div>
+      <div class="lang-wrap">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <main class="page" id="page-content">
+
+    <!-- ═══════════════ OVERVIEW ═══════════════ -->
+    <div class="section active" id="sec-overview">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">★</span><span data-key="nav_overview">Overview</span></div>
+        <div class="sec-sub" data-key="overview_sub">Full website audit — rkiza.com | March 2026</div>
+      </div>
+
+      <div class="alert alert-critical mb6">
+        <span style="font-size:20px">⚠️</span>
+        <div>
+          <div class="alert-title" data-key="overview_title">Executive Summary</div>
+          <div class="alert-body" data-key="overview_body">Rkiza.com has a genuine product niche in building materials, plumbing, and electrical supplies with real brand differentiation. However, the site suffers from critical SEO gaps, weak conversion architecture, thin product content, and absent trust signals — suppressing an estimated 60–75% of potential revenue.</div>
+        </div>
+      </div>
+
+      <div class="g4 mb6" id="kpi-grid"></div>
+
+      <div class="g2 mb6">
+        <div class="card">
+          <div class="card-title" data-key="sec_score">Score Card</div>
+          <div id="score-bars"></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px">
+          <div style="display:flex;gap:28px;justify-content:center">
+            <div class="score-wrap">
+              <div class="score-circle" style="--sc:#E53935;border-color:#E53935">
+                <div class="score-num" style="color:#E53935">4.9</div>
+                <div class="score-denom">/ 10</div>
+              </div>
+              <div class="score-lbl" data-key="overall_score">Overall Score</div>
+            </div>
+            <div class="score-wrap">
+              <div class="score-circle" style="--sc:#2E7D32;border-color:#2E7D32">
+                <div class="score-num" style="color:#2E7D32">8.2</div>
+                <div class="score-denom">/ 10</div>
+              </div>
+              <div class="score-lbl" data-key="potential_score">Potential Score</div>
+            </div>
+          </div>
+          <!-- Radar SVG -->
+          <svg viewBox="0 0 280 280" style="width:100%;max-width:280px" id="radar-svg"></svg>
+        </div>
+      </div>
+
+      <div class="g4">
+        <div class="card" style="text-align:center;border-top:3px solid #E53935">
+          <div style="font-size:32px;font-weight:800;color:#E53935">6</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px" data-key="critical_actions">Critical Actions</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid #2E7D32">
+          <div style="font-size:32px;font-weight:800;color:#2E7D32">5</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px" data-key="quick_wins">Quick Wins</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid #1565C0">
+          <div style="font-size:32px;font-weight:800;color:#1565C0">2.9×</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px" data-key="revenue_impact">Est. Revenue Impact</div>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid #FB8C00">
+          <div style="font-size:32px;font-weight:800;color:#FB8C00">12</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px" data-key="roadmap_months">Month Roadmap</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ UX ═══════════════ -->
+    <div class="section" id="sec-ux">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">3</span><span data-key="nav_ux">UX Review</span></div>
+      </div>
+      <div class="g2 mb6">
+        <div class="card">
+          <div class="card-title" data-key="homepage_issues">Homepage Issues</div>
+          <div id="homepage-issues"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-key="friction_points">Conversion Friction Points</div>
+          <div id="friction-issues"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-key="funnel_title">Conversion Funnel Analysis</div>
+        <div class="funnel-grid" id="funnel-grid"></div>
+        <div class="funnel-note" data-key="funnel_note">Optimizing CVR from 1.2% → 3.5% = 2.9× revenue on same traffic</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ SEO ═══════════════ -->
+    <div class="section" id="sec-seo">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">6</span><span data-key="nav_seo">SEO Audit</span></div>
+      </div>
+      <div class="g2 mb6">
+        <div class="card">
+          <div class="card-title" data-key="seo_issues_title">Critical SEO Issues</div>
+          <div id="seo-issues"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-key="kw_opps">Keyword Opportunities</div>
+          <div id="kw-chart"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-key="kw_table">Keyword Opportunity Table</div>
+        <div class="tbl-wrap" id="kw-table"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ PERFORMANCE ═══════════════ -->
+    <div class="section" id="sec-performance">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">7</span><span data-key="nav_performance">Technical Performance</span></div>
+      </div>
+      <div class="card mb6">
+        <div class="card-title" data-key="vitals_title">Core Web Vitals</div>
+        <div class="vitals-grid" id="vitals-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-key="tech_issues">Technical Issues</div>
+        <div class="tbl-wrap" id="tech-table"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ CRO ═══════════════ -->
+    <div class="section" id="sec-cro">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">8</span><span data-key="nav_cro">Conversion Rate Optimization</span></div>
+      </div>
+      <div class="g2 mb6">
+        <div class="card">
+          <div class="card-title" data-key="trust_audit">Trust Signal Audit</div>
+          <div class="tbl-wrap" id="trust-table"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" data-key="psych_triggers">Missing Psychological Triggers</div>
+          <div id="psych-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ COMPETITORS ═══════════════ -->
+    <div class="section" id="sec-competitors">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">9</span><span data-key="nav_competitors">Competitor Benchmark</span></div>
+      </div>
+      <div class="card mb6">
+        <div class="tbl-wrap" id="comp-table"></div>
+      </div>
+      <div class="alert alert-info">
+        <span style="font-size:20px">🎯</span>
+        <div>
+          <div class="alert-title" data-key="local_seo_title">Local SEO Golden Opportunity</div>
+          <div class="alert-body" data-key="local_seo_body">None of the main competitors have claimed Al-Qassim / Unayzah / Buraydah local SEO keywords. With 3–4 location-specific pages and a verified Google Business Profile, Rkiza can dominate local search results within 60–90 days.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ PRIORITIES ═══════════════ -->
+    <div class="section" id="sec-priorities">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">10</span><span data-key="nav_priorities">Priority Issues</span></div>
+      </div>
+      <div class="filter-bar" id="priority-filters"></div>
+      <div class="card">
+        <div class="tbl-wrap" id="priority-table"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ ROADMAP ═══════════════ -->
+    <div class="section" id="sec-roadmap">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">11</span><span data-key="nav_roadmap">12-Month Roadmap</span></div>
+        <div class="sec-sub" data-key="roadmap_sub">Strategic quarterly plan: critical fixes → UX → SEO → growth</div>
+      </div>
+      <div class="roadmap-grid" id="roadmap-grid"></div>
+    </div>
+
+    <!-- ═══════════════ SCORE ═══════════════ -->
+    <div class="section" id="sec-score">
+      <div class="sec-hdr">
+        <div class="sec-title"><span class="sec-badge">13</span><span data-key="nav_score">Final Score Card</span></div>
+      </div>
+      <div class="g2 mb6">
+        <div class="card">
+          <div class="card-title" data-key="current_score">Current Score — 4.9/10</div>
+          <div id="score-bars-2"></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
+          <div style="display:flex;gap:28px">
+            <div class="score-wrap">
+              <div class="score-circle" style="border-color:#E53935">
+                <div class="score-num" style="color:#E53935">4.9</div>
+                <div class="score-denom">/ 10</div>
+              </div>
+              <div class="score-lbl" data-key="current_score_lbl">Current</div>
+            </div>
+            <div class="score-wrap">
+              <div class="score-circle" style="border-color:#2E7D32">
+                <div class="score-num" style="color:#2E7D32">8.2</div>
+                <div class="score-denom">/ 10</div>
+              </div>
+              <div class="score-lbl" data-key="potential_score_lbl">Potential</div>
+            </div>
+          </div>
+          <div class="alert alert-success" style="width:100%">
+            <span>✅</span>
+            <div class="alert-body" data-key="score_note">Achievable within 12 months with focused execution of the roadmap.</div>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-info">
+        <span style="font-size:22px">💼</span>
+        <div>
+          <div class="alert-title" data-key="consultant_note">Consultant's Final Note</div>
+          <div class="alert-body" data-key="consultant_body">Rkiza.com sits at a critical inflection point. The two highest-leverage initiatives are: (1) Fix SEO architecture — URL slugs, schema markup, and 10 content articles; and (2) Rebuild product pages with specs, multiple images, and reviews. These alone could double organic traffic and triple the conversion rate within 6 months. The B2B opportunity represents 3–5× higher average order value and is entirely untapped. Estimated revenue impact of full roadmap: 2.5–4× growth within 12 months.</div>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- /page -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════
+const SCORES=[
+  {key:'ux',      en:'UX & Usability',       ar:'تجربة المستخدم',        v:4.0,c:'#E53935'},
+  {key:'seo',     en:'SEO',                  ar:'تهيئة محركات البحث',    v:3.0,c:'#E53935'},
+  {key:'design',  en:'Design & Brand',       ar:'التصميم والهوية',        v:5.0,c:'#FB8C00'},
+  {key:'cro',     en:'Conversion (CRO)',      ar:'معدل التحويل',           v:3.5,c:'#E53935'},
+  {key:'perf',    en:'Performance',           ar:'الأداء التقني',          v:5.2,c:'#FB8C00'},
+  {key:'content', en:'Content Quality',       ar:'جودة المحتوى',           v:4.8,c:'#FB8C00'},
+  {key:'trust',   en:'Trust Signals',         ar:'عناصر الثقة',            v:3.0,c:'#E53935'},
+  {key:'mobile',  en:'Mobile Experience',     ar:'تجربة الجوال',           v:5.5,c:'#FB8C00'},
+];
+
+const KPIS=[
+  {icon:'📦',en:'Product Categories',  ar:'فئات المنتجات',      val:'5+',    sub_en:'Plumbing, Electrical, Lighting…',sub_ar:'سباكة، كهرباء، إضاءة…',c:'#1565C0'},
+  {icon:'📈',en:'Market Opportunity',  ar:'حجم السوق',          val:'$8B+',  sub_en:'KSA e-commerce 2024 est.',      sub_ar:'تجارة إلكترونية السعودية 2024',c:'#2E7D32'},
+  {icon:'📱',en:'Social Followers',    ar:'متابعو التواصل',     val:'4,444', sub_en:'Instagram — engaged community',  sub_ar:'إنستغرام — مجتمع متفاعل',c:'#1565C0'},
+  {icon:'🎯',en:'Current CVR (est.)',  ar:'معدل التحويل الحالي',val:'1.2%',  sub_en:'Target after optimisation: 3.5%',sub_ar:'الهدف بعد التحسين: 3.5%',c:'#E53935'},
+  {icon:'🚀',en:'Target CVR',          ar:'المستهدف',            val:'3.5%',  sub_en:'Post-roadmap projection',        sub_ar:'توقعات ما بعد الخطة',c:'#2E7D32'},
+  {icon:'⚡',en:'LCP (estimated)',     ar:'سرعة التحميل',       val:'3.8s',  sub_en:'Target: < 2.5s',                 sub_ar:'الهدف: أقل من 2.5 ث',c:'#FB8C00'},
+];
+
+const VITALS=[
+  {m:'LCP',en:'Largest Contentful Paint', ar:'أكبر عنصر مرئي',      v:3.8, u:'s',  thr:2.5,st:'poor'},
+  {m:'FID',en:'First Input Delay',        ar:'تأخير أول تفاعل',     v:180, u:'ms', thr:100, st:'poor'},
+  {m:'CLS',en:'Cumulative Layout Shift',  ar:'تحول التخطيط التراكمي',v:0.18,u:'',  thr:0.1, st:'poor'},
+  {m:'FCP',en:'First Contentful Paint',   ar:'أول رسم محتوى',       v:2.4, u:'s',  thr:1.8, st:'needs'},
+  {m:'TTFB',en:'Time to First Byte',      ar:'وقت أول بايت',        v:820, u:'ms', thr:600, st:'needs'},
+  {m:'SI', en:'Speed Index',              ar:'مؤشر السرعة',          v:4.2, u:'s',  thr:3.4, st:'poor'},
+];
+const VITAL_COL={poor:'#E53935',needs:'#FB8C00',good:'#2E7D32'};
+
+const KEYWORDS=[
+  {kw:'عوامة خزان المياه',vol:8000,pri:'critical'},
+  {kw:'أدوات سباكة السعودية',vol:5500,pri:'critical'},
+  {kw:'مواد بناء أونلاين',vol:3800,pri:'critical'},
+  {kw:'سخانات مياه للبيع',vol:4200,pri:'high'},
+  {kw:'tank float valve Saudi',vol:2200,pri:'high'},
+  {kw:'plumbing supplies Qassim',vol:400,pri:'quick'},
+  {kw:'كيف تركب عوامة',vol:1800,pri:'blog'},
+  {kw:'مواد بناء القصيم',vol:600,pri:'quick'},
+];
+
+const PRIORITIES=[
+  {id:1,en:'Add WhatsApp floating chat widget',ar:'إضافة ودجت واتساب عائم',impact:'critical',effort:'easy',roi_en:'+20–35% inquiries',roi_ar:'+20-35% استفسارات'},
+  {id:2,en:'Fix URL slugs to keyword-rich format',ar:'تصحيح روابط URL بكلمات مفتاحية',impact:'critical',effort:'medium',roi_en:'+40–60% organic traffic',roi_ar:'+40-60% حركة عضوية'},
+  {id:3,en:'Add trust bar (payments, warranty)',ar:'إضافة شريط الثقة',impact:'critical',effort:'easy',roi_en:'+15–25% CVR',roi_ar:'+15-25% معدل تحويل'},
+  {id:4,en:'Implement Product Schema JSON-LD',ar:'تطبيق Product Schema JSON-LD',impact:'critical',effort:'medium',roi_en:'+18% CTR from Google',roi_ar:'+18% نسبة النقر'},
+  {id:5,en:'Add product specification tables',ar:'إضافة جداول المواصفات الفنية',impact:'critical',effort:'medium',roi_en:'+25% add-to-cart rate',roi_ar:'+25% إضافة للسلة'},
+  {id:6,en:'Homepage hero redesign + dual CTA',ar:'إعادة تصميم الهيرو + CTA مزدوج',impact:'critical',effort:'medium',roi_en:'+30–50% engagement',roi_ar:'+30-50% تفاعل'},
+  {id:7,en:'Launch Arabic content blog (10 articles)',ar:'إطلاق مدونة المحتوى العربية',impact:'high',effort:'medium',roi_en:'+3,000 organic sessions/mo',roi_ar:'+3,000 جلسة عضوية'},
+  {id:8,en:'Add related products + bought-together',ar:'إضافة منتجات ذات صلة',impact:'high',effort:'easy',roi_en:'+15–22% AOV',roi_ar:'+15-22% متوسط الطلب'},
+  {id:9,en:'Enable reviews + post-purchase email',ar:'تفعيل التقييمات والبريد',impact:'high',effort:'easy',roi_en:'+20% product CVR',roi_ar:'+20% تحويل المنتج'},
+  {id:10,en:'Add advanced product filters',ar:'إضافة فلاتر متقدمة',impact:'high',effort:'medium',roi_en:'–35% bounce rate',roi_ar:'-35% معدل الارتداد'},
+  {id:11,en:'Submit XML sitemap to GSC',ar:'إرسال Sitemap XML إلى GSC',impact:'high',effort:'easy',roi_en:'Faster indexing',roi_ar:'فهرسة أسرع'},
+  {id:12,en:'Create B2B landing page + quote form',ar:'إنشاء صفحة هبوط B2B',impact:'high',effort:'medium',roi_en:'New high-value segment',roi_ar:'شريحة عملاء جديدة'},
+  {id:13,en:'Optimize images to WebP + lazy loading',ar:'تحسين الصور WebP + Lazy Loading',impact:'medium',effort:'easy',roi_en:'LCP < 2.5s',roi_ar:'LCP أقل من 2.5 ث'},
+  {id:14,en:'Abandoned cart email automation',ar:'أتمتة بريد السلة المهجورة',impact:'medium',effort:'medium',roi_en:'Recover 8–15% carts',roi_ar:'استرداد 8-15% سلات'},
+];
+
+const ROADMAP=[
+  {q:'Q1',title_en:'Critical Fixes',title_ar:'الإصلاحات الحرجة',period_en:'Months 1–3',period_ar:'الأشهر 1-3',color:'#E53935',emoji:'🔥',
+   en:['WhatsApp chat widget + CTA','Trust bar (payments, warranty, shipping)','XML Sitemap to Google Search Console','Product spec tables (top 50 SKUs)','Stock availability indicators','Product + BreadcrumbList Schema JSON-LD','Homepage hero redesign with dual CTA','WebP images + lazy loading','Google Analytics 4 + GSC setup'],
+   ar:['ودجت واتساب عائم + زر CTA','شريط الثقة (دفع، ضمان، شحن)','Sitemap XML إلى Google Search Console','جداول مواصفات فنية (أعلى 50 منتج)','مؤشرات توافر المخزون','Product + BreadcrumbList Schema JSON-LD','إعادة تصميم الهيرو + CTA مزدوج','صور WebP + Lazy Loading','إعداد Google Analytics 4 + GSC']},
+  {q:'Q2',title_en:'UX & CRO',title_ar:'تجربة المستخدم والتحويل',period_en:'Months 4–6',period_ar:'الأشهر 4-6',color:'#FB8C00',emoji:'🔧',
+   en:['Mega-menu navigation rebuild','Advanced filters (price, brand, spec)','Related products + frequently bought','Post-purchase review email flow','Product comparison feature','A/B test CTA variants','B2B landing page + quote form','Abandoned cart email (3-step)','Breadcrumb navigation site-wide','Tabby / Tamara BNPL integration'],
+   ar:['إعادة بناء قائمة Mega Menu','فلاتر متقدمة (سعر، ماركة، مواصفات)','منتجات ذات صلة + يُشترى معاً','تدفق تقييم بعد الشراء','ميزة مقارنة المنتجات','اختبار A/B لأزرار CTA','صفحة هبوط B2B + نموذج طلب','أتمتة سلة التسوق المهجورة (3 رسائل)','مسار التنقل Breadcrumb','دمج تابي / تمارا BNPL']},
+  {q:'Q3',title_en:'SEO Expansion',title_ar:'توسيع حضور SEO',period_en:'Months 7–9',period_ar:'الأشهر 7-9',color:'#1565C0',emoji:'🔍',
+   en:['Migrate URLs to keyword slugs (301 redirects)','15 Arabic how-to blog articles','Category page intro text (200 words each)','Local SEO pages (Unayzah, Qassim, Buraydah)','Internal linking strategy','Google Business Profile launch','Backlink outreach campaign','FAQ Schema on top 20 products'],
+   ar:['ترحيل URLs مع إعادة توجيه 301','15 مقالة مدونة عربية','نص مقدمة صفحات الفئات (200 كلمة)','صفحات SEO محلية (عنيزة، القصيم، بريدة)','استراتيجية ربط داخلي','إطلاق Google Business Profile','حملة بناء الروابط الخلفية','FAQ Schema لأعلى 20 منتج']},
+  {q:'Q4',title_en:'Growth & Automation',title_ar:'النمو والأتمتة',period_en:'Months 10–12',period_ar:'الأشهر 10-12',color:'#2E7D32',emoji:'🚀',
+   en:['Customer loyalty programme','Real-time inventory management','Email marketing list + welcome flow','Ramadan / National Day campaigns','Mobile app evaluation (B2B)','30 total blog articles published','Affiliate / referral programme','Annual KPI review vs. audit benchmarks'],
+   ar:['برنامج ولاء العملاء','إدارة مخزون في الوقت الفعلي','قائمة بريد + تدفق الترحيب','حملات رمضان / اليوم الوطني','تقييم تطبيق جوال B2B','نشر 30 مقالة مدونة','برنامج تابع / إحالة','مراجعة سنوية للأداء']},
+];
+
+const COMPETITORS=[
+  {name:'rkiza.com',urls:false,blog:false,chat:'partial',schema:false,reviews:'basic',b2b:false,ship:'partial',mobile:'adequate',specs:false,bnpl:false},
+  {name:'Tafassell',urls:true,blog:'limited',chat:true,schema:'partial',reviews:'verified',b2b:false,ship:true,mobile:'good',specs:'some',bnpl:true},
+  {name:'Mawadsa',urls:true,blog:true,chat:true,schema:true,reviews:'verified',b2b:'partial',ship:true,mobile:'good',specs:true,bnpl:true},
+  {name:'Masdar',urls:true,blog:true,chat:true,schema:true,reviews:'verified',b2b:true,ship:true,mobile:'adequate',specs:true,bnpl:true},
+  {name:'Sawab',urls:'partial',blog:false,chat:true,schema:'partial',reviews:true,b2b:'partial',ship:true,mobile:'app',specs:true,bnpl:true},
+];
+const COMP_FEATURES=[
+  {k:'urls',en:'SEO-friendly URLs',ar:'روابط URL بكلمات مفتاحية'},
+  {k:'blog',en:'Blog / Content Hub',ar:'مدونة / مركز محتوى'},
+  {k:'chat',en:'WhatsApp / Live Chat',ar:'واتساب / دردشة مباشرة'},
+  {k:'schema',en:'Product Schema',ar:'Product Schema'},
+  {k:'reviews',en:'Review System',ar:'نظام التقييمات'},
+  {k:'b2b',en:'B2B Pricing',ar:'أسعار B2B'},
+  {k:'ship',en:'Free Shipping',ar:'شحن مجاني'},
+  {k:'mobile',en:'Mobile UX',ar:'تجربة الجوال'},
+  {k:'specs',en:'Spec Tables',ar:'جداول المواصفات'},
+  {k:'bnpl',en:'BNPL (Tabby/Tamara)',ar:'BNPL (تابي/تمارا)'},
+];
+
+// ═══════════════════════════════════════════════════════════
+// I18N
+// ═══════════════════════════════════════════════════════════
+const T={
+  en:{
+    nav_overview:'Overview',nav_ux:'UX Review',nav_seo:'SEO Audit',nav_performance:'Performance',
+    nav_cro:'CRO',nav_competitors:'Competitors',nav_priorities:'Priorities',nav_roadmap:'Roadmap',nav_score:'Score',
+    sb_title:'Audit Dashboard',sb_agency:'E-Commerce Consulting Division',sb_date:'March 2026',
+    score_badge:'Overall Score: 4.9/10',breadcrumb_prefix:'rkiza.com',
+    overview_sub:'Full website audit — rkiza.com | March 2026',
+    overview_title:'Executive Summary',
+    overview_body:'Rkiza.com has a genuine product niche in building materials, plumbing, and electrical supplies with real brand differentiation. However, the site suffers from critical SEO gaps, weak conversion architecture, thin product content, and absent trust signals — suppressing an estimated 60–75% of potential revenue.',
+    overall_score:'Overall Score',potential_score:'Potential Score',
+    sec_score:'Score Card',critical_actions:'Critical Actions',quick_wins:'Quick Wins',revenue_impact:'Est. Revenue Impact',roadmap_months:'Month Roadmap',
+    homepage_issues:'Homepage Issues',friction_points:'Conversion Friction Points',
+    funnel_title:'Conversion Funnel Analysis',funnel_current:'Current State',funnel_optimized:'After Optimization',
+    funnel_note:'Optimizing CVR from 1.2% → 3.5% = 2.9× revenue on same traffic',
+    seo_issues_title:'Critical SEO Issues',kw_opps:'Keyword Opportunities (Monthly Volume)',kw_table:'Keyword Opportunity Table',
+    vitals_title:'Core Web Vitals',tech_issues:'Technical Issues',
+    trust_audit:'Trust Signal Audit',psych_triggers:'Missing Psychological Triggers',
+    local_seo_title:'Local SEO Golden Opportunity',
+    local_seo_body:'None of the main competitors have claimed Al-Qassim / Unayzah / Buraydah local SEO keywords. With 3–4 location-specific pages and a verified Google Business Profile, Rkiza can dominate local search within 60–90 days.',
+    all_filter:'All',
+    col_issue:'Issue',col_severity:'Severity',col_impact:'Impact',col_effort:'Effort',col_roi:'Expected ROI',
+    col_feature:'Feature',col_kw:'Keyword',col_vol:'Monthly Vol.',col_rank:'Current Rank',col_pri:'Priority',
+    col_issue_tech:'Technical Issue',col_fix:'Recommended Fix',col_target:'Target',col_status:'Status',
+    col_trust:'Trust Element',
+    kw_not_ranking:'Not Ranking',
+    st_critical:'Critical',st_high:'High',st_medium:'Medium',st_easy:'Easy',st_med_e:'Medium',
+    st_missing:'Missing',st_partial:'Partial',st_present:'Present',st_poor:'Poor',st_needs:'Needs Work',st_good:'Good',
+    roadmap_sub:'Strategic quarterly plan: critical fixes → UX → SEO → growth',
+    current_score:'Current Score — 4.9/10',current_score_lbl:'Current',potential_score_lbl:'Potential',
+    score_note:'Achievable within 12 months with focused execution of the roadmap.',
+    consultant_note:"Consultant's Final Note",
+    consultant_body:'Rkiza.com sits at a critical inflection point. The two highest-leverage initiatives are: (1) Fix SEO architecture — URL slugs, schema, and 10 content articles; and (2) Rebuild product pages with specs, multiple images, and reviews. These alone could double organic traffic and triple the conversion rate within 6 months. B2B opportunity = 3–5× higher AOV. Estimated full-roadmap impact: 2.5–4× revenue growth in 12 months.',
+    target_label:'Target',
+    vital_poor:'Poor',vital_needs:'Needs Work',
+  },
+  ar:{
+    nav_overview:'نظرة عامة',nav_ux:'تجربة المستخدم',nav_seo:'تهيئة البحث',nav_performance:'الأداء التقني',
+    nav_cro:'التحويل',nav_competitors:'المنافسون',nav_priorities:'الأولويات',nav_roadmap:'خارطة الطريق',nav_score:'التقييم',
+    sb_title:'لوحة التدقيق',sb_agency:'قسم استشارات التجارة الإلكترونية',sb_date:'مارس 2026',
+    score_badge:'التقييم الإجمالي: 4.9/10',breadcrumb_prefix:'rkiza.com',
+    overview_sub:'تدقيق شامل — rkiza.com | مارس 2026',
+    overview_title:'الملخص التنفيذي',
+    overview_body:'يمتلك موقع rkiza.com نيشًا حقيقيًا في سوق مواد البناء والسباكة والكهرباء مع تميّز فعلي في المنتجات. غير أن الموقع يعاني من ثغرات حرجة في تهيئة محركات البحث، وضعف في بنية التحويل، وشُح في محتوى المنتجات، وغياب عناصر الثقة — مما يُقدَّر بأنه يكبت 60-75% من إمكانات الإيرادات.',
+    overall_score:'التقييم الإجمالي',potential_score:'التقييم المحتمل',
+    sec_score:'بطاقة التقييم',critical_actions:'إجراءات حرجة',quick_wins:'فرص سريعة',revenue_impact:'الأثر على الإيرادات',roadmap_months:'شهراً في الخطة',
+    homepage_issues:'مشكلات الصفحة الرئيسية',friction_points:'نقاط الاحتكاك في التحويل',
+    funnel_title:'تحليل قمع التحويل',funnel_current:'الوضع الحالي',funnel_optimized:'بعد التحسين',
+    funnel_note:'تحسين معدل التحويل من 1.2% إلى 3.5% = 2.9 ضعف الإيرادات على نفس الحركة',
+    seo_issues_title:'المشكلات الحرجة في SEO',kw_opps:'فرص الكلمات المفتاحية (الحجم الشهري)',kw_table:'جدول فرص الكلمات المفتاحية',
+    vitals_title:'مؤشرات Core Web Vitals',tech_issues:'المشكلات التقنية',
+    trust_audit:'تدقيق عناصر الثقة',psych_triggers:'المحفزات النفسية المفقودة',
+    local_seo_title:'الفرصة المحلية الذهبية',
+    local_seo_body:'لم يستحوذ أي منافس رئيسي على كلمات SEO المحلية في القصيم / عنيزة / بريدة. بثلاثة إلى أربع صفحات محلية وملف Google Business Profile، يمكن لركيزة التفوق في نتائج البحث المحلي خلال 60-90 يوماً.',
+    all_filter:'الكل',
+    col_issue:'المشكلة',col_severity:'الخطورة',col_impact:'الأثر',col_effort:'الجهد',col_roi:'العائد المتوقع',
+    col_feature:'الميزة',col_kw:'الكلمة المفتاحية',col_vol:'الحجم الشهري',col_rank:'الترتيب الحالي',col_pri:'الأولوية',
+    col_issue_tech:'المشكلة التقنية',col_fix:'الإصلاح الموصى به',col_target:'الهدف',col_status:'الحالة',
+    col_trust:'عنصر الثقة',
+    kw_not_ranking:'غير مُصنَّف',
+    st_critical:'حرج',st_high:'عالٍ',st_medium:'متوسط',st_easy:'سهل',st_med_e:'متوسط',
+    st_missing:'غائب',st_partial:'جزئي',st_present:'متوفر',st_poor:'ضعيف',st_needs:'يحتاج تحسين',st_good:'جيد',
+    roadmap_sub:'خطة ربع سنوية: الإصلاحات الحرجة ← تجربة المستخدم ← SEO ← النمو',
+    current_score:'الدرجة الحالية — 4.9/10',current_score_lbl:'الحالية',potential_score_lbl:'المحتملة',
+    score_note:'قابل للتحقيق خلال 12 شهراً بتنفيذ منضبط ومركَّز لخارطة الطريق.',
+    consultant_note:'التقييم الختامي للاستشاري',
+    consultant_body:'يقف موقع rkiza.com عند نقطة انعطاف حرجة. أعلى رافعتين: (1) تصحيح بنية SEO — روابط URL والبيانات الهيكلية و10 مقالات محتوى؛ و(2) إعادة بناء صفحات المنتجات بالمواصفات والصور المتعددة والتقييمات. الأثر التقديري لخارطة الطريق الكاملة: نمو الإيرادات بمقدار 2.5 إلى 4 أضعاف خلال 12 شهراً.',
+    target_label:'الهدف',
+    vital_poor:'ضعيف',vital_needs:'يحتاج تحسين',
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let lang = localStorage.getItem('rkiza_lang') || 'en';
+let activeSection = 'overview';
+let priorityFilter = 'all';
+
+// ═══════════════════════════════════════════════════════════
+// NAV CONFIG
+// ═══════════════════════════════════════════════════════════
+const NAV=[
+  {key:'overview',icon:'📊'},{key:'ux',icon:'🖥️'},{key:'seo',icon:'🔍'},
+  {key:'performance',icon:'⚡'},{key:'cro',icon:'🎯'},{key:'competitors',icon:'⚔️'},
+  {key:'priorities',icon:'📋'},{key:'roadmap',icon:'🗺️'},{key:'score',icon:'🏆'},
+];
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const l = k => T[lang][k] || T.en[k] || k;
+const scoreColor = v => v < 4.5 ? '#E53935' : v < 6 ? '#FB8C00' : '#2E7D32';
+
+function badge(type, text) {
+  return `<span class="badge b-${type}">${text}</span>`;
+}
+
+function compCell(val) {
+  if (val === true) return `<span class="yes">✓</span>`;
+  if (val === false) return `<span class="no">✗</span>`;
+  if (val === 'partial' || val === 'limited' || val === 'some') return `<span class="par">~</span>`;
+  if (val === 'verified') return `<span class="yes">✓ ${lang==='ar'?'معتمد':'Verified'}</span>`;
+  if (val === 'basic') return `<span class="par">~ ${lang==='ar'?'أساسي':'Basic'}</span>`;
+  if (val === 'app') return `<span class="yes">✓ App</span>`;
+  if (val === 'adequate') return `<span class="par">~ ${lang==='ar'?'مقبول':'OK'}</span>`;
+  if (val === 'good') return `<span class="yes">✓ ${lang==='ar'?'جيد':'Good'}</span>`;
+  return `<span class="par">${val}</span>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════
+function buildSidebar() {
+  const nav = $('sidebar-nav');
+  nav.innerHTML = NAV.map(n => `
+    <div class="nav-item ${n.key===activeSection?'active':''}" onclick="navigate('${n.key}')">
+      <span class="nav-icon">${n.icon}</span>
+      <span>${l('nav_'+n.key)}</span>
+    </div>`).join('');
+  $('sb-title').textContent = l('sb_title');
+  $('sb-agency').textContent = l('sb_agency');
+  $('sb-date').textContent = l('sb_date');
+}
+
+// ═══════════════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════════════
+function updateHeader() {
+  $('score-badge').textContent = l('score_badge');
+  $('breadcrumb').textContent = l('breadcrumb_prefix') + ' / ' + l('nav_'+activeSection);
+  $('btn-en').classList.toggle('active', lang==='en');
+  $('btn-ar').classList.toggle('active', lang==='ar');
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRANSLATE [data-key] elements
+// ═══════════════════════════════════════════════════════════
+function translatePage() {
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.getAttribute('data-key');
+    if (T[lang][k]) el.textContent = T[lang][k];
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Score bars
+// ═══════════════════════════════════════════════════════════
+function renderScoreBars(containerId) {
+  const c = $(containerId); if(!c) return;
+  c.innerHTML = SCORES.map(s => `
+    <div class="prog-row">
+      <div class="prog-label">${lang==='ar'?s.ar:s.en}</div>
+      <div class="prog-track">
+        <div class="prog-fill" style="width:${s.v*10}%;background:${scoreColor(s.v)}"></div>
+      </div>
+      <div class="prog-val" style="color:${scoreColor(s.v)}">${s.v}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: KPI cards
+// ═══════════════════════════════════════════════════════════
+function renderKPIs() {
+  const c = $('kpi-grid'); if(!c) return;
+  c.innerHTML = KPIS.map(k => `
+    <div class="kpi" style="--kc:${k.c}">
+      <div class="kpi-icon">${k.icon}</div>
+      <div class="kpi-label">${lang==='ar'?k.ar:k.en}</div>
+      <div class="kpi-val">${k.val}</div>
+      <div class="kpi-sub">${lang==='ar'?k.sub_ar:k.sub_en}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Radar SVG
+// ═══════════════════════════════════════════════════════════
+function renderRadar() {
+  const svg = $('radar-svg'); if(!svg) return;
+  const cx=140, cy=140, maxR=105, n=SCORES.length;
+  const pt = (i,v) => {
+    const a = (Math.PI*2*i/n) - Math.PI/2;
+    const r = (v/10)*maxR;
+    return [cx+r*Math.cos(a), cy+r*Math.sin(a)];
+  };
+  let html = '';
+  // Grid rings
+  [2,4,6,8,10].forEach(lv => {
+    const pts = SCORES.map((_,i)=>pt(i,lv).join(',')).join(' ');
+    html += `<polygon points="${pts}" fill="none" stroke="#E2E8F0" stroke-width="1"/>`;
+  });
+  // Axes
+  SCORES.forEach((_,i) => {
+    const [x,y]=pt(i,10);
+    html += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E2E8F0" stroke-width="1"/>`;
+  });
+  // Data polygon
+  const dataPts = SCORES.map((_,i)=>pt(i,SCORES[i].v).join(',')).join(' ');
+  html += `<polygon points="${dataPts}" fill="rgba(21,101,192,0.15)" stroke="#1565C0" stroke-width="2"/>`;
+  // Dots
+  SCORES.forEach((s,i) => {
+    const [x,y]=pt(i,s.v);
+    html += `<circle cx="${x}" cy="${y}" r="4" fill="${scoreColor(s.v)}" stroke="#fff" stroke-width="2"/>`;
+  });
+  // Labels
+  SCORES.forEach((s,i) => {
+    const [x,y]=pt(i,12.5);
+    const label = lang==='ar'?s.ar:s.en;
+    // Shorten labels for radar
+    const short = label.length>12 ? label.substring(0,11)+'…' : label;
+    html += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="#475569" font-weight="600" font-family="${lang==='ar'?'Cairo,Arial':'Inter,Arial'}">${short}</text>`;
+  });
+  svg.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Issue cards
+// ═══════════════════════════════════════════════════════════
+function issueCard(sev, title, desc) {
+  const sevLabel = l('st_'+sev);
+  return `<div class="issue-item ${sev}">
+    <div>
+      <div class="issue-title">${title}</div>
+      <div class="issue-desc">${desc}</div>
+      <div class="issue-meta">${badge(sev, sevLabel)}</div>
+    </div>
+  </div>`;
+}
+
+function renderUXIssues() {
+  const homepage = [
+    {s:'critical',en:'No hero / value proposition',ar:'غياب الهيرو وعرض القيمة',en_d:'Visitors cannot identify what Rkiza sells within 3 seconds.',ar_d:'لا يستطيع الزوار معرفة ما تبيعه ركيزة خلال 3 ثوانٍ.'},
+    {s:'critical',en:'No featured / bestseller products',ar:'لا منتجات مميزة',en_d:'Homepage offers no product exploration — blind navigation.',ar_d:'الصفحة الرئيسية لا تعرض منتجات للاستكشاف.'},
+    {s:'high',en:'No social proof above the fold',ar:'لا إثبات اجتماعي',en_d:'No reviews or customer counts in first screen.',ar_d:'لا تقييمات أو إحصائيات في الشاشة الأولى.'},
+    {s:'high',en:'No promotional banner or offers',ar:'لا بانر ترويجي',en_d:'No urgency trigger to encourage further exploration.',ar_d:'لا محفز إلحاح لتشجيع الاستكشاف.'},
+  ];
+  const friction = [
+    {s:'critical',en:'No WhatsApp chat widget',ar:'غياب ودجت واتساب',en_d:'Saudi buyers expect instant messaging — major abandonment trigger.',ar_d:'المشترون السعوديون يتوقعون الرسائل الفورية.'},
+    {s:'critical',en:'Price hidden on category pages',ar:'السعر مخفي في الفئات',en_d:'Extra clicks needed to see pricing — every click costs conversions.',ar_d:'كل نقرة إضافية لمعرفة السعر تُكلّف تحويلات.'},
+    {s:'high',en:'No guest checkout option',ar:'لا شراء كضيف',en_d:'Forced account creation adds friction for new visitors.',ar_d:'إنشاء الحساب الإجباري يزيد الاحتكاك.'},
+    {s:'high',en:'No BNPL (Tabby / Tamara)',ar:'غياب خيارات BNPL',en_d:'Buy-now-pay-later is standard in Saudi e-commerce.',ar_d:'الدفع الآجل معيار في التجارة الإلكترونية السعودية.'},
+  ];
+  $('homepage-issues').innerHTML = homepage.map(i=>issueCard(i.s, lang==='ar'?i.ar:i.en, lang==='ar'?i.ar_d:i.en_d)).join('');
+  $('friction-issues').innerHTML = friction.map(i=>issueCard(i.s, lang==='ar'?i.ar:i.en, lang==='ar'?i.ar_d:i.en_d)).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Funnel
+// ═══════════════════════════════════════════════════════════
+function renderFunnel() {
+  const c = $('funnel-grid'); if(!c) return;
+  const funnels = [
+    {label:l('funnel_current'), color:'#E53935', stages:[
+      {en:'Visits',ar:'الزيارات',pct:100},{en:'Category View',ar:'تصفح الفئات',pct:55},
+      {en:'Product View',ar:'صفحة المنتج',pct:32},{en:'Add to Cart',ar:'إضافة للسلة',pct:8},
+      {en:'Purchase',ar:'الشراء',pct:1.2}
+    ]},
+    {label:l('funnel_optimized'), color:'#2E7D32', stages:[
+      {en:'Visits',ar:'الزيارات',pct:100},{en:'Category View',ar:'تصفح الفئات',pct:68},
+      {en:'Product View',ar:'صفحة المنتج',pct:48},{en:'Add to Cart',ar:'إضافة للسلة',pct:18},
+      {en:'Purchase',ar:'الشراء',pct:3.5}
+    ]},
+  ];
+  c.innerHTML = funnels.map((f,fi) => `
+    <div>
+      <div class="funnel-title" style="color:${f.color}">${f.label}</div>
+      ${f.stages.map((s,si) => {
+        const w = Math.max((s.pct/100)*320, 80);
+        const isLast = si===f.stages.length-1;
+        const bg = isLast ? (fi===0?'#FEF2F2':'#F0FDF4') : '#F8FAFC';
+        const tc = isLast ? f.color : '#1E293B';
+        const bc = isLast ? (fi===0?'#FECACA':'#BBF7D0') : '#E2E8F0';
+        return `<div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width:${w}px;background:${bg};border:1px solid ${bc};color:${tc}">
+            <span>${lang==='ar'?s.ar:s.en}</span><span>${s.pct}%</span>
+          </div></div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: SEO issues + KW chart
+// ═══════════════════════════════════════════════════════════
+function renderSEO() {
+  const seoIssues = [
+    {s:'critical',en:'Numeric URL slugs (/categories/928120)',ar:'روابط URL رقمية',en_d:'Zero keyword signals for Google. Fix: /categories/plumbing/float-valves',ar_d:'الحل: /فئات/سباكة/عوامات'},
+    {s:'critical',en:'No blog / content hub',ar:'غياب مدونة المحتوى',en_d:'Zero top-of-funnel content. Missing "how to install float valve" searches.',ar_d:'صفر محتوى معلوماتي.'},
+    {s:'critical',en:'Auto-generated meta descriptions',ar:'وصف ميتا مُولَّد تلقائياً',en_d:'Category pages use brand tagline — no keyword targeting per category.',ar_d:'صفحات الفئات تستخدم شعار الشركة كوصف ميتا.'},
+    {s:'critical',en:'No Product Schema markup',ar:'غياب Product Schema',en_d:'No rich snippets (star ratings, price) in Google results.',ar_d:'لا مقتطفات منسقة (نجوم التقييم، السعر) في جوجل.'},
+    {s:'high',en:'Thin category pages',ar:'صفحات فئات شحيحة',en_d:'Only product thumbnails — no intro text, no topical authority.',ar_d:'مجرد شبكات منتجات بلا نص — لا سلطة موضوعية.'},
+    {s:'high',en:'No internal linking strategy',ar:'لا استراتيجية ربط داخلي',en_d:"No pillar-cluster architecture. Product pages don't link to categories.",ar_d:'لا بنية محاور وأذرع. المنتجات لا تُحيل للفئات.'},
+  ];
+  $('seo-issues').innerHTML = seoIssues.map(i=>issueCard(i.s, lang==='ar'?i.ar:i.en, lang==='ar'?i.ar_d:i.en_d)).join('');
+
+  // Bar chart SVG
+  const priColor = {critical:'#E53935',high:'#FB8C00',quick:'#2E7D32',blog:'#1565C0'};
+  const maxV = 8000, padL = 200, W = 480, H = 240, barH = 22, gap = 8;
+  let svgH = '';
+  KEYWORDS.forEach((kw,i) => {
+    const y = i*(barH+gap)+10;
+    const bw = (kw.vol/maxV)*(W-padL-30);
+    const col = priColor[kw.pri]||'#94A3B8';
+    svgH += `<text x="${padL-8}" y="${y+barH/2}" text-anchor="end" dominant-baseline="middle" font-size="11" fill="#475569" font-family="${lang==='ar'?'Cairo,Arial':'Inter,Arial'}">${kw.kw}</text>`;
+    svgH += `<rect x="${padL}" y="${y}" width="${bw}" height="${barH}" rx="3" fill="${col}"/>`;
+    svgH += `<text x="${padL+bw+5}" y="${y+barH/2}" dominant-baseline="middle" font-size="10" fill="#475569" font-weight="600">${(kw.vol/1000).toFixed(kw.vol<1000?1:0)}k</text>`;
+  });
+  $('kw-chart').innerHTML = `<svg viewBox="0 0 ${W} ${KEYWORDS.length*(barH+gap)+20}" style="width:100%">${svgH}</svg>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:12px">
+    ${[['critical','#E53935',lang==='ar'?'حرج':'Critical'],['high','#FB8C00',lang==='ar'?'عالٍ':'High'],['quick','#2E7D32',lang==='ar'?'فرصة سريعة':'Quick Win'],['blog','#1565C0',lang==='ar'?'مقالة مدونة':'Blog']].map(([,c,lbl])=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c};display:inline-block"></span>${lbl}</span>`).join('')}
+  </div>`;
+
+  // KW Table
+  $('kw-table').innerHTML = `<table>
+    <thead><tr><th>${l('col_kw')}</th><th>${l('col_vol')}</th><th>${l('col_rank')}</th><th>${l('col_pri')}</th></tr></thead>
+    <tbody>${KEYWORDS.map(kw=>{
+      const pb = kw.pri==='critical'?'critical':kw.pri==='high'?'high':kw.pri==='quick'?'low':'medium';
+      const pLabel = kw.pri==='critical'?l('st_critical'):kw.pri==='high'?l('st_high'):kw.pri==='quick'?'Quick Win':'Blog';
+      return `<tr><td>${kw.kw}</td><td>~${kw.vol.toLocaleString()}</td><td>${badge('missing',l('kw_not_ranking'))}</td><td>${badge(pb,pLabel)}</td></tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Vitals + tech table
+// ═══════════════════════════════════════════════════════════
+function renderPerformance() {
+  $('vitals-grid').innerHTML = VITALS.map(v => {
+    const col = VITAL_COL[v.st]||'#94A3B8';
+    const stLabel = v.st==='poor'?l('vital_poor'):v.st==='needs'?l('vital_needs'):'Good';
+    return `<div class="vital" style="--vc:${col}">
+      <div class="vital-metric">${v.m}</div>
+      <div class="vital-val" style="color:${col}">${v.v}</div>
+      <div style="font-size:12px;color:var(--text3)">${v.u||'—'}</div>
+      <div class="vital-name">${lang==='ar'?v.ar:v.en}</div>
+      <div class="vital-threshold">${l('target_label')}: ${v.thr}${v.u}</div>
+      <div class="vital-status" style="color:${col}">${stLabel}</div>
+    </div>`;
+  }).join('');
+
+  const techRows = [
+    {en_i:'Images not in WebP format',ar_i:'الصور بصيغة JPG/PNG وليس WebP',sev:'critical',en_f:'Enable WebP conversion in Salla/Zid settings',ar_f:'تفعيل تحويل WebP في إعدادات سلة/زد',e:'easy'},
+    {en_i:'No image lazy loading',ar_i:'لا Lazy Loading للصور',sev:'high',en_f:'Add loading="lazy" to all off-screen images',ar_f:'إضافة loading="lazy" لصور المنتجات',e:'easy'},
+    {en_i:'No Product Schema (JSON-LD)',ar_i:'غياب Product Schema',sev:'high',en_f:'Implement JSON-LD Product + BreadcrumbList',ar_f:'تطبيق JSON-LD للمنتجات و BreadcrumbList',e:'medium'},
+    {en_i:'No XML Sitemap in GSC',ar_i:'لا Sitemap XML',sev:'high',en_f:'Generate and submit sitemap via Google Search Console',ar_f:'إنشاء Sitemap XML وإرساله عبر Search Console',e:'easy'},
+    {en_i:'No CDN for static assets',ar_i:'لا CDN للأصول الثابتة',sev:'medium',en_f:'Enable Cloudflare or platform CDN',ar_f:'تفعيل Cloudflare أو CDN المنصة',e:'medium'},
+    {en_i:'CLS layout shift issues',ar_i:'مشكلات تحول التخطيط CLS',sev:'medium',en_f:'Reserve image dimensions in CSS',ar_f:'تحديد أبعاد الصور في CSS',e:'easy'},
+  ];
+  $('tech-table').innerHTML = `<table>
+    <thead><tr><th>${l('col_issue_tech')}</th><th>${l('col_severity')}</th><th>${l('col_fix')}</th><th>${l('col_effort')}</th></tr></thead>
+    <tbody>${techRows.map(r=>`<tr>
+      <td>${lang==='ar'?r.ar_i:r.en_i}</td>
+      <td>${badge(r.sev,l('st_'+r.sev))}</td>
+      <td>${lang==='ar'?r.ar_f:r.en_f}</td>
+      <td>${badge(r.e==='easy'?'easy':'medium-e',l('st_'+r.e==='easy'?'easy':'med_e'))}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: CRO
+// ═══════════════════════════════════════════════════════════
+function renderCRO() {
+  const trustRows = [
+    {en:'Payment icons (Mada, Visa, Apple Pay)',ar:'أيقونات الدفع (مدى، فيزا، Apple Pay)',st:'missing',imp:'critical'},
+    {en:'Saudi CR (commercial registration)',ar:'السجل التجاري السعودي',st:'missing',imp:'high'},
+    {en:'Return & refund policy on product pages',ar:'سياسة الإرجاع في صفحات المنتج',st:'missing',imp:'high'},
+    {en:'Verified reviews',ar:'تقييمات معتمدة',st:'missing',imp:'critical'},
+    {en:'Security badge (SSL)',ar:'شارة أمان SSL',st:'missing',imp:'high'},
+    {en:'Order statistics counter',ar:'عداد الطلبات',st:'missing',imp:'medium'},
+    {en:'WhatsApp contact integration',ar:'تكامل واتساب',st:'partial',imp:'critical'},
+    {en:'Warranty badge (structured)',ar:'شارة الضمان منظمة',st:'partial',imp:'medium'},
+  ];
+  $('trust-table').innerHTML = `<table>
+    <thead><tr><th>${l('col_trust')}</th><th>${l('col_status')}</th><th>${l('col_impact')}</th></tr></thead>
+    <tbody>${trustRows.map(r=>`<tr>
+      <td>${lang==='ar'?r.ar:r.en}</td>
+      <td>${badge(r.st,l('st_'+r.st))}</td>
+      <td>${badge(r.imp,l('st_'+r.imp))}</td>
+    </tr>`).join('')}</tbody></table>`;
+
+  const psych = [
+    {icon:'⚡',en:'Scarcity',ar:'الندرة',en_d:'No "Only 3 left" indicators.',ar_d:'لا مؤشرات «لم يتبق إلا 3 قطع».'},
+    {icon:'👥',en:'Social Proof',ar:'الإثبات الاجتماعي',en_d:'No customer count on category pages.',ar_d:'لا عداد عملاء في صفحات الفئات.'},
+    {icon:'🏆',en:'Authority',ar:'السلطة',en_d:'No certifications or press mentions.',ar_d:'لا شهادات جودة أو ذِكر في الصحافة.'},
+    {icon:'⏱️',en:'Urgency',ar:'الإلحاح',en_d:'No time-limited offers or countdown timers.',ar_d:'لا عروض محدودة الوقت مع عدادات تنازلية.'},
+    {icon:'🔔',en:'FOMO',ar:'الخوف من الفوات',en_d:'"Someone just bought this" notifications missing.',ar_d:'غياب إشعارات «اشترى هذا للتو».'},
+    {icon:'🎁',en:'Reciprocity',ar:'المعاملة بالمثل',en_d:'No free guide offered for email signup.',ar_d:'لا دليل مجاني مقابل الاشتراك.'},
+  ];
+  $('psych-list').innerHTML = psych.map(p=>`
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#F8FAFC;border-radius:8px;border:1px solid #E2E8F0;margin-bottom:8px">
+      <span style="font-size:18px;flex-shrink:0">${p.icon}</span>
+      <div>
+        <div style="font-size:13.5px;font-weight:600;color:#1E293B">${lang==='ar'?p.ar:p.en}</div>
+        <div style="font-size:12.5px;color:#475569;margin-top:2px">${lang==='ar'?p.ar_d:p.en_d}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Competitor table
+// ═══════════════════════════════════════════════════════════
+function renderCompetitors() {
+  const hdr = `<thead><tr><th>${l('col_feature')}</th>${COMPETITORS.map(c=>`<th>${c.name}</th>`).join('')}</tr></thead>`;
+  const body = COMP_FEATURES.map(f => `<tr>
+    <td>${lang==='ar'?f.ar:f.en}</td>
+    ${COMPETITORS.map((c,ci)=>`<td class="${ci===0?'rkiza-row':''}">${compCell(c[f.k])}</td>`).join('')}
+  </tr>`).join('');
+  $('comp-table').innerHTML = `<table>${hdr}<tbody>${body}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Priorities
+// ═══════════════════════════════════════════════════════════
+function renderPriorities() {
+  const fc = $('priority-filters'); if(fc){
+    const filters = ['all','critical','high','medium'];
+    const filterLabels = {all:l('all_filter'),critical:l('st_critical'),high:l('st_high'),medium:l('st_medium')};
+    fc.innerHTML = filters.map(f=>`<button class="filter-pill ${f===priorityFilter?'active':''}" onclick="setFilter('${f}')">${filterLabels[f]}</button>`).join('');
+  }
+  const rows = priorityFilter==='all' ? PRIORITIES : PRIORITIES.filter(p=>p.impact===priorityFilter);
+  const tb = $('priority-table'); if(!tb) return;
+  tb.innerHTML = `<table>
+    <thead><tr><th>#</th><th>${l('col_issue')}</th><th>${l('col_impact')}</th><th>${l('col_effort')}</th><th>${l('col_roi')}</th></tr></thead>
+    <tbody>${rows.map(p=>`<tr>
+      <td><span class="p-num">${p.id}</span></td>
+      <td>${lang==='ar'?p.ar:p.en}</td>
+      <td>${badge(p.impact,l('st_'+p.impact))}</td>
+      <td>${badge(p.effort==='easy'?'easy':'medium-e',l('st_'+(p.effort==='easy'?'easy':'med_e')))}</td>
+      <td style="color:#2E7D32;font-weight:600;font-size:13px">${lang==='ar'?p.roi_ar:p.roi_en}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER: Roadmap
+// ═══════════════════════════════════════════════════════════
+function renderRoadmap() {
+  const c = $('roadmap-grid'); if(!c) return;
+  c.innerHTML = ROADMAP.map(q => {
+    const items = lang==='ar' ? q.ar : q.en;
+    const titleKey = lang==='ar' ? q.title_ar||q.ar_title : q.title_en||q.en_title;
+    // fallback
+    const title = (q.title_en && lang==='en') ? q.title_en : (q.title_ar && lang==='ar') ? q.title_ar : (lang==='ar' ? q.ar : q.en);
+    const period = lang==='ar' ? q.period_ar : q.period_en;
+    return `<div class="rq">
+      <div class="rq-header" style="background:${q.color}">
+        <div>
+          <div class="rq-q">${q.q}</div>
+          <div class="rq-title">${title}</div>
+          <div class="rq-period">${period}</div>
+        </div>
+        <div class="rq-emoji">${q.emoji}</div>
+      </div>
+      <div class="rq-items">
+        ${(items||[]).map(item=>`<div class="rq-item"><div class="rq-dot" style="background:${q.color}"></div>${item}</div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function navigate(key) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const sec = $('sec-'+key);
+  if(sec) sec.classList.add('active');
+  activeSection = key;
+  buildSidebar();
+  updateHeader();
+  closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// LANGUAGE
+// ═══════════════════════════════════════════════════════════
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('rkiza_lang', l);
+  document.documentElement.lang = l;
+  document.documentElement.dir = l==='ar' ? 'rtl' : 'ltr';
+  document.title = l==='ar' ? 'rkiza.com — لوحة التدقيق 2026' : 'Rkiza.com — Audit Dashboard 2026';
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════
+// SIDEBAR MOBILE
+// ═══════════════════════════════════════════════════════════
+function toggleSidebar() { $('sidebar').classList.toggle('open'); $('overlay').classList.toggle('open'); }
+function closeSidebar()  { $('sidebar').classList.remove('open');  $('overlay').classList.remove('open'); }
+
+// ═══════════════════════════════════════════════════════════
+// FILTER
+// ═══════════════════════════════════════════════════════════
+function setFilter(f) { priorityFilter = f; renderPriorities(); }
+
+// ═══════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════
+function renderAll() {
+  buildSidebar();
+  updateHeader();
+  translatePage();
+  renderKPIs();
+  renderScoreBars('score-bars');
+  renderScoreBars('score-bars-2');
+  renderRadar();
+  renderUXIssues();
+  renderFunnel();
+  renderSEO();
+  renderPerformance();
+  renderCRO();
+  renderCompetitors();
+  renderPriorities();
+  renderRoadmap();
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  renderAll();
+});
+</script>
+</body>
+</html>
