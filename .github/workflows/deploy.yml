@@ -1,0 +1,62 @@
+name: Build & Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build dashboard
+        run: npm run build
+
+      - name: Verify dist folder
+        run: |
+          echo "📦 Build output:"
+          ls -lh dist/
+          echo "✅ Build successful"
+
+      # ── Deploy via FTP to Hostinger ──────────────────────────────────────
+      # Option A: FTP Deploy (recommended for Hostinger shared hosting)
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ./public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+
+      # ── Alternative: Deploy via SSH / rsync ──────────────────────────────
+      # Uncomment below and comment out the FTP step if you prefer SSH:
+      #
+      # - name: Deploy via rsync over SSH
+      #   uses: easingthemes/ssh-deploy@v4
+      #   with:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     REMOTE_HOST: ${{ secrets.SSH_HOST }}
+      #     REMOTE_USER: ${{ secrets.SSH_USER }}
+      #     SOURCE: "dist/"
+      #     TARGET: "/home/u123456789/public_html/"
+      #     ARGS: "-rlgoDzvc --delete"
