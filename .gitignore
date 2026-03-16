@@ -1,7 +1,0 @@
-node_modules/
-.build-entry.jsx
-.app_clean.jsx
-.tmp-entry.jsx
-*.log
-.DS_Store
-Thumbs.db
